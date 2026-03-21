@@ -1,10 +1,98 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh">
 <head>
-    <title>Ssssssuuuuuuyu'WEBSITE</title>
+  <meta charset="UTF-8">
+  <title>记录</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Helvetica Neue", serif;
+      background: #0d0d0d;
+      color: #eaeaea;
+      line-height: 1.8;
+    }
+    .container {
+      max-width: 700px;
+      margin: 80px auto;
+      padding: 20px;
+    }
+    h1 {
+      font-weight: 400;
+      font-size: 32px;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+    .desc {
+      color: #888;
+      font-size: 14px;
+      margin-bottom: 60px;
+    }
+    .post {
+      margin-bottom: 40px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .post:hover {
+      opacity: 0.6;
+    }
+    .date {
+      font-size: 12px;
+      color: #666;
+    }
+    .title {
+      font-size: 20px;
+      margin: 5px 0;
+    }
+    .content {
+      display: none;
+      margin-top: 15px;
+      color: #ccc;
+    }
+    .footer {
+      margin-top: 80px;
+      font-size: 12px;
+      color: #555;
+      text-align: center;
+    }
+  </style>
 </head>
+
 <body>
-    <h1>MY HOME</h1>
-    <p>FIRST DAY HERER,EVERYTHING ALRIGHT</p>
+  <div class="container">
+    <h1>一些无处安放的日子</h1>
+    <div class="desc">记录那些没有被记住的情绪。</div>
+
+    <div class="post" onclick="toggle(this)">
+      <div class="date">2026.03.21</div>
+      <div class="title">第一天</div>
+      <div class="content">
+        今天把这个网站搭起来了。<br>
+        没有特别开心，也没有不开心。<br>
+        只是觉得，好像终于有个地方，可以把话放下。
+      </div>
+    </div>
+
+    <div class="post" onclick="toggle(this)">
+      <div class="date">2026.03.22</div>
+      <div class="title">一些模糊的东西</div>
+      <div class="content">
+        有些情绪说不清楚。<br>
+        也不太想说清楚。<br>
+        就这样放着，反而比较真实。
+      </div>
+    </div>
+
+    <div class="footer">
+      © 2026
+    </div>
+  </div>
+
+  <script>
+    function toggle(el) {
+      let content = el.querySelector(".content");
+      content.style.display =
+        content.style.display === "block" ? "none" : "block";
+    }
+  </script>
 </body>
 </html>
