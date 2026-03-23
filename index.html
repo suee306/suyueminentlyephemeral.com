@@ -130,6 +130,14 @@
       class="fixed top-0 w-full flex justify-between items-center px-6 h-16 bg-white dark:bg-[#1b1b1b] border-b-2 border-[#1b1b1b]/10 dark:border-white/10 z-50"
     >
       <div class="flex items-center gap-8">
+        <button
+          id="mobileMenuBtn"
+          class="md:hidden flex items-center justify-center w-10 h-10 rounded hover:bg-[#f9f9f9] dark:hover:bg-white/5 transition-colors"
+          type="button"
+          aria-label="Open menu"
+        >
+          <span class="material-symbols-outlined">menu</span>
+        </button>
         <span class="text-2xl font-black uppercase tracking-tighter text-[#1b1b1b] dark:text-white font-headline">Brief Place</span>
         <nav class="hidden md:flex gap-6 h-full">
           <a class="flex items-center text-[#0058bc] border-b-4 border-[#0058bc] pb-1 font-headline font-bold tracking-tight" href="#">Explore</a>
@@ -145,9 +153,16 @@
       </div>
     </header>
 
+    <!-- Mobile backdrop -->
+    <div
+      id="mobileBackdrop"
+      class="fixed inset-0 bg-black/30 hidden md:hidden z-30"
+    ></div>
+
     <!-- SideNavBar -->
     <aside
-      class="fixed left-0 top-16 h-[calc(100vh-64px)] flex flex-col p-4 w-64 bg-white/70 dark:bg-[#1b1b1b]/70 backdrop-blur-xl shadow-[64px_0_64px_-20px_rgba(27,27,27,0.04)] z-40"
+      id="sideNav"
+      class="fixed left-0 top-16 h-[calc(100vh-64px)] flex flex-col p-4 w-64 bg-white/70 dark:bg-[#1b1b1b]/70 backdrop-blur-xl shadow-[64px_0_64px_-20px_rgba(27,27,27,0.04)] z-40 -translate-x-full md:translate-x-0 transition-transform"
     >
       <div class="mb-8 px-2 flex items-center gap-3">
         <div class="w-12 h-12 bg-surface-container-high overflow-hidden">
@@ -195,7 +210,7 @@
     </aside>
 
     <!-- Main Content Canvas -->
-    <main class="ml-64 mt-16 p-8 min-h-screen relative overflow-hidden flex flex-col items-center">
+    <main class="ml-0 md:ml-64 mt-16 p-4 md:p-8 min-h-screen relative overflow-hidden flex flex-col items-center">
       <!-- Background Textures -->
       <div class="absolute inset-0 manga-texture pointer-events-none"></div>
       <div class="relative z-10 w-full max-w-4xl pt-12">
@@ -339,6 +354,7 @@
          全局状态
       ========================= */
       let currentTab = "record";
+      let currentLoadedNoteId = null; // 当前编辑器里加载的笔记 id（用于删除时联动清空）
 
       /* ========================
          DOM 获取
@@ -366,6 +382,17 @@
       const clearAllBtn = document.getElementById("clearAllBtn");
       const themeLabel = document.getElementById("themeLabel");
 
+      const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+      const sideNav = document.getElementById("sideNav");
+      const mobileBackdrop = document.getElementById("mobileBackdrop");
+      const isMobile = window.matchMedia("(max-width: 767px)");
+
+      function closeMobileNav() {
+        if (typeof window.__setMobileNavOpen === "function") {
+          window.__setMobileNavOpen(false);
+        }
+      }
+
       init();
 
       function init() {
@@ -373,6 +400,7 @@
         loadDraft();
         updateWordCount();
         bindEvents();
+        initMobileNav();
 
         // 默认高亮 Record
         const recordLink = Array.from(navLinks).find(
@@ -380,6 +408,45 @@
         );
         switchTab(currentTab, recordLink);
         renderEntries();
+      }
+
+      function initMobileNav() {
+        if (!mobileMenuBtn || !sideNav || !mobileBackdrop) return;
+
+        // 初始状态：手机隐藏侧边栏，非手机显示
+        if (!isMobile.matches) {
+          sideNav.classList.remove("-translate-x-full");
+          sideNav.classList.add("translate-x-0");
+          mobileBackdrop.classList.add("hidden");
+          return;
+        }
+
+        sideNav.classList.add("-translate-x-full");
+        sideNav.classList.remove("translate-x-0");
+        mobileBackdrop.classList.add("hidden");
+
+        const setOpen = (open) => {
+          const shouldShow = isMobile.matches && open;
+          sideNav.classList.toggle("translate-x-0", shouldShow);
+          sideNav.classList.toggle("-translate-x-full", !shouldShow);
+          mobileBackdrop.classList.toggle("hidden", !shouldShow);
+        };
+
+        mobileMenuBtn.addEventListener("click", () => setOpen(true));
+        mobileBackdrop.addEventListener("click", () => setOpen(false));
+
+        window.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") setOpen(false);
+        });
+
+        // 监听窗口变化，避免状态错乱
+        isMobile.addEventListener("change", () => {
+          if (isMobile.matches) setOpen(false);
+          else setOpen(false);
+        });
+
+        // 暴露到闭包里：供其它点击事件调用
+        window.__setMobileNavOpen = setOpen;
       }
 
       /* ========================
@@ -402,8 +469,12 @@
             e.preventDefault();
             const tabText = link.textContent.trim().toLowerCase();
             switchTab(tabText, link);
+            closeMobileNav();
           });
         });
+
+        newEntryBtn.addEventListener("click", closeMobileNav);
+        if (fabBtn) fabBtn.addEventListener("click", closeMobileNav);
 
         // 顶部/底部导航：做基础跳转与滚动
         const findNavLink = (name) =>
@@ -418,16 +489,19 @@
             const t = link.textContent.trim().toLowerCase();
             if (t === "explore") {
               textarea.scrollIntoView({ behavior: "smooth", block: "center" });
+              closeMobileNav();
               return;
             }
             if (t === "mission") {
               const h1 = document.querySelector("main h1");
               h1?.scrollIntoView({ behavior: "smooth", block: "center" });
+              closeMobileNav();
               return;
             }
             if (t === "archive") {
               switchTab("record", findNavLink("record"));
               archivePanel?.scrollIntoView({ behavior: "smooth", block: "start" });
+              closeMobileNav();
             }
           });
         });
@@ -439,16 +513,19 @@
             const t = link.textContent.trim().toLowerCase();
             if (t === "protocol") {
               textarea.scrollIntoView({ behavior: "smooth", block: "center" });
+              closeMobileNav();
               return;
             }
             if (t === "archive") {
               switchTab("record", findNavLink("record"));
               archivePanel?.scrollIntoView({ behavior: "smooth", block: "start" });
+              closeMobileNav();
               return;
             }
             if (t === "security") {
               switchTab("settings", findNavLink("settings"));
               settingsPanel?.scrollIntoView({ behavior: "smooth", block: "start" });
+              closeMobileNav();
             }
           });
         });
@@ -476,6 +553,7 @@
             textarea.value = "";
             updateWordCount();
             renderPreview();
+            currentLoadedNoteId = null;
             renderEntries();
           });
         }
@@ -583,6 +661,7 @@
       function loadDraft() {
         const draft = localStorage.getItem("draft");
         if (draft !== null && draft !== undefined) textarea.value = draft;
+        currentLoadedNoteId = null;
         renderPreview();
       }
 
@@ -605,7 +684,12 @@
         }
 
         const tags = (tagsInput?.value || "").trim();
+        const id =
+          (typeof crypto !== "undefined" && crypto.randomUUID)
+            ? crypto.randomUUID()
+            : `${Date.now()}_${Math.random().toString(16).slice(2)}`;
         notes.unshift({
+          id,
           content,
           tags,
           time: new Date().toLocaleString(),
@@ -617,6 +701,7 @@
         textarea.value = "";
         localStorage.setItem("draft", "");
         if (tagsInput) tagsInput.value = "";
+        currentLoadedNoteId = null;
         updateWordCount();
         renderPreview();
         renderEntries();
@@ -629,6 +714,7 @@
           textarea.value = "";
           localStorage.setItem("draft", "");
           if (tagsInput) tagsInput.value = "";
+          currentLoadedNoteId = null;
           updateWordCount();
           renderPreview();
           renderEntries();
@@ -647,6 +733,18 @@
         } catch {
           notes = [];
         }
+
+        // 兼容旧数据：给历史里没有 id 的 note 补上
+        let idsChanged = false;
+        notes.forEach((n) => {
+          if (!n || n.id) return;
+          idsChanged = true;
+          n.id =
+            (typeof crypto !== "undefined" && crypto.randomUUID)
+              ? crypto.randomUUID()
+              : `${Date.now()}_${Math.random().toString(16).slice(2)}`;
+        });
+        if (idsChanged) localStorage.setItem("notes", JSON.stringify(notes));
 
         const normalizedQuery = (topSearchInput?.value || "").trim().toLowerCase();
 
@@ -670,6 +768,7 @@
         emptyState.classList.add("hidden");
 
         filtered.forEach((n) => {
+          const noteId = n?.id;
           const contentRaw = String(n?.content || "");
           const time = escapeHtml(String(n?.time || ""));
           const tagsEscaped = escapeHtml(String(n?.tags || ""));
@@ -683,7 +782,16 @@
           card.className =
             "p-4 bg-white dark:bg-slate-800 rounded-xl shadow hover:scale-105 transition cursor-pointer";
           card.innerHTML = `
-            <div class="text-xs opacity-60 mb-2">${time}</div>
+            <div class="flex items-start justify-between gap-3 mb-2">
+              <div class="text-xs opacity-60">${time}</div>
+              <button
+                type="button"
+                data-delete-note="${escapeHtml(String(noteId || ""))}"
+                class="text-[10px] px-2 py-1 rounded bg-transparent border border-outline-variant/40 text-on-surface hover:bg-on-surface hover:text-white transition"
+              >
+                Delete
+              </button>
+            </div>
             <div class="text-sm mb-2">${bodyHtml}</div>
             <div class="text-xs text-blue-500">${tagsText}</div>
           `;
@@ -699,6 +807,16 @@
           card.tabIndex = 0;
 
           notesDiv.appendChild(card);
+
+          // Delete button click (不要触发 card click）
+          const deleteBtn = card.querySelector("[data-delete-note]");
+          deleteBtn?.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const id = deleteBtn.getAttribute("data-delete-note");
+            if (!id) return;
+            deleteNoteById(id);
+          });
         });
       }
 
@@ -708,6 +826,7 @@
 
         textarea.value = content;
         if (tagsInput) tagsInput.value = tags;
+        currentLoadedNoteId = note?.id || null;
 
         localStorage.setItem("draft", textarea.value);
         updateWordCount();
@@ -736,6 +855,34 @@
               return m;
           }
         });
+      }
+
+      function deleteNoteById(noteId) {
+        if (!noteId) return;
+        if (!confirm("删除这条留言吗？")) return;
+
+        const raw = localStorage.getItem("notes") || "[]";
+        let notes;
+        try {
+          notes = JSON.parse(raw);
+          if (!Array.isArray(notes)) notes = [];
+        } catch {
+          notes = [];
+        }
+
+        const next = notes.filter((n) => String(n?.id || "") !== String(noteId));
+        localStorage.setItem("notes", JSON.stringify(next));
+
+        if (currentLoadedNoteId && String(currentLoadedNoteId) === String(noteId)) {
+          textarea.value = "";
+          if (tagsInput) tagsInput.value = "";
+          localStorage.setItem("draft", "");
+          currentLoadedNoteId = null;
+          updateWordCount();
+          renderPreview();
+        }
+
+        renderEntries();
       }
     </script>
   </body>
