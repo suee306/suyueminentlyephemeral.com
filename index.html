@@ -3,13 +3,12 @@
 <html class="light" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Manga Mission - Technical Inkwell</title>
+<title>Brief Place - Technical Inkwell</title>
 <!-- Fonts -->
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <!-- Material Symbols -->
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -86,15 +85,28 @@
             background-size: 4px 4px;
             opacity: 0.05;
         }
-        /* Custom "Ink" focus state from design system */
         .ink-focus:focus {
             border-bottom-width: 3px;
             border-color: #0058bc;
             outline: none;
         }
-        /* Asymmetric Layout helper */
-        .manga-panel-clip {
-            clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%);
+        .typewriter-cursor::after {
+            content: '';
+            display: inline-block;
+            width: 12px;
+            height: 24px;
+            background-color: #0058bc;
+            margin-left: 4px;
+            vertical-align: middle;
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            from, to { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .manga-portrait-mask {
+            mask-image: linear-gradient(to bottom, black 80%, transparent 100%), linear-gradient(to right, black 80%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%), linear-gradient(to right, black 80%, transparent 100%);
         }
     </style>
 </head>
@@ -102,7 +114,7 @@
 <!-- TopNavBar -->
 <header class="fixed top-0 w-full flex justify-between items-center px-6 h-16 bg-white dark:bg-[#1b1b1b] border-b-2 border-[#1b1b1b]/10 dark:border-white/10 z-50">
 <div class="flex items-center gap-8">
-<span class="text-2xl font-black uppercase tracking-tighter text-[#1b1b1b] dark:text-white font-headline">Manga Mission</span>
+<span class="text-2xl font-black uppercase tracking-tighter text-[#1b1b1b] dark:text-white font-headline">Brief Place</span>
 <nav class="hidden md:flex gap-6 h-full">
 <a class="flex items-center text-[#0058bc] border-b-4 border-[#0058bc] pb-1 font-headline font-bold tracking-tight" href="#">Explore</a>
 <a class="flex items-center text-[#1b1b1b] dark:text-white opacity-70 hover:bg-[#f9f9f9] dark:hover:bg-white/5 transition-colors font-headline font-bold tracking-tight" href="#">Mission</a>
@@ -111,161 +123,85 @@
 </div>
 <div class="flex items-center gap-4">
 <div class="relative hidden sm:block">
-<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm" data-icon="search">search</span>
-<input class="bg-surface-container-low border-b-2 border-outline-variant py-1.5 pl-10 pr-4 text-sm w-64 ink-focus transition-all" placeholder="Search Missions..." type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="bg-surface-container-low border-b-2 border-outline-variant py-1.5 pl-10 pr-4 text-sm w-64 ink-focus transition-all" placeholder="what you want know about me" type="text"/>
 </div>
-<button class="p-2 text-on-surface-variant hover:bg-surface-container transition-colors">
-<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
-</button>
-<button class="p-2 text-on-surface-variant hover:bg-surface-container transition-colors">
-<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
-</button>
 </div>
 </header>
 <!-- SideNavBar -->
 <aside class="fixed left-0 top-16 h-[calc(100vh-64px)] flex flex-col p-4 w-64 bg-white/70 dark:bg-[#1b1b1b]/70 backdrop-blur-xl shadow-[64px_0_64px_-20px_rgba(27,27,27,0.04)] z-40">
 <div class="mb-8 px-2 flex items-center gap-3">
 <div class="w-12 h-12 bg-surface-container-high overflow-hidden">
-<img alt="Confident manga girl illustration" class="w-full h-full object-cover grayscale brightness-110" data-alt="Close up of a confident manga girl face with sharp ink lines" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXo6ISBN_maUj4qeZuvT8maRdAM847sl6IVWz5T8swUWTyDeMYcD69WHwjdQlCm0zQkiQ3gKZsWc1c8e5B0X04sRQZo8m81_T0r6h8-zEgRinUctUnn5gxJjeOlKcDr4jfU5rOvDCSCWTW8ZTwdB8h0CzSVAy_fM4Az1LC4C2-yARjG7XIcZyA_rvN6LEEfx1aVabyQc0GM1SsNwIhQFcxq-NjxI1PeUoZaEBNDF71twWsjsl5u_f759Fa0q3mb5PUAIcqsVO7FhQ"/>
+<img alt="Suyu illustration" class="w-full h-full object-cover grayscale brightness-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXo6ISBN_maUj4qeZuvT8maRdAM847sl6IVWz5T8swUWTyDeMYcD69WHwjdQlCm0zQkiQ3gKZsWc1c8e5B0X04sRQZo8m81_T0r6h8-zEgRinUctUnn5gxJjeOlKcDr4jfU5rOvDCSCWTW8ZTwdB8h0CzSVAy_fM4Az1LC4C2-yARjG7XIcZyA_rvN6LEEfx1aVabyQc0GM1SsNwIhQFcxq-NjxI1PeUoZaEBNDF71twWsjsl5u_f759Fa0q3mb5PUAIcqsVO7FhQ"/>
 </div>
 <div>
-<h2 class="text-xl font-black text-[#1b1b1b] dark:text-white font-headline leading-none">Manga Mission</h2>
+<h2 class="text-xl font-black text-[#1b1b1b] dark:text-white font-headline leading-none">Suyu</h2>
 <p class="font-['Space_Grotesk'] uppercase tracking-widest text-[11px] text-primary mt-1">Technical Inkwell</p>
 </div>
 </div>
 <div class="flex flex-col gap-2 flex-grow">
 <a class="flex items-center gap-4 px-4 py-3 bg-[#0058bc] text-white font-bold hover:translate-x-1 transition-transform duration-200 group border-l-4 border-[#9e3d00]" href="#">
-<span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
+<span class="material-symbols-outlined">edit_note</span>
 <span class="font-headline tracking-widest text-[11px] uppercase">Record</span>
 </a>
 <a class="flex items-center gap-4 px-4 py-3 text-[#1b1b1b] dark:text-white hover:bg-[#f9f9f9] hover:translate-x-1 transition-transform duration-200" href="#">
-<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+<span class="material-symbols-outlined">terminal</span>
 <span class="font-headline tracking-widest text-[11px] uppercase">Code</span>
 </a>
 <button class="mt-6 mx-2 py-3 bg-on-surface text-surface font-headline font-bold uppercase tracking-widest text-[12px] flex items-center justify-center gap-2 hover:bg-primary transition-colors">
-<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+<span class="material-symbols-outlined text-sm">add</span>
                 New Entry
             </button>
 </div>
 <div class="mt-auto pt-4 border-t border-outline-variant/20">
 <a class="flex items-center gap-4 px-4 py-3 text-[#1b1b1b] dark:text-white hover:bg-[#f9f9f9] hover:translate-x-1 transition-transform duration-200" href="#">
-<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="material-symbols-outlined">settings</span>
 <span class="font-headline tracking-widest text-[11px] uppercase">Settings</span>
 </a>
 </div>
 </aside>
 <!-- Main Content Canvas -->
-<main class="ml-64 mt-16 p-8 min-h-screen relative overflow-hidden">
+<main class="ml-64 mt-16 p-8 min-h-screen relative overflow-hidden flex flex-col items-center">
 <!-- Background Textures -->
 <div class="absolute inset-0 manga-texture pointer-events-none"></div>
-<div class="relative z-10 max-w-7xl mx-auto">
-<!-- Hero Header Section - Asymmetric Bento -->
-<div class="grid grid-cols-12 gap-8 mb-12">
-<div class="col-span-12 lg:col-span-8 bg-surface-container-lowest p-10 border-l-8 border-primary relative overflow-hidden">
-<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 -mr-16 -mt-16 rotate-45"></div>
-<span class="font-label text-[10px] tracking-[0.2em] text-primary uppercase font-bold mb-4 block">Active Directive / Phase 04</span>
-<h1 class="text-6xl md:text-7xl font-headline font-black text-on-surface leading-none tracking-tighter mb-6">REWRITE THE <br/><span class="text-primary italic">NARRATIVE.</span></h1>
-<p class="text-lg text-on-surface-variant max-w-xl leading-relaxed">
-                        Interface protocols established. Deploy technical inkwell modules to synchronize mission data with local repositories. High-contrast rendering engaged.
-                    </p>
-<div class="mt-10 flex gap-4">
-<button class="bg-primary text-on-primary px-8 py-4 font-headline font-bold uppercase tracking-widest text-sm hover:bg-primary-container transition-all active:scale-95">Initiate Sync</button>
-<button class="bg-transparent border-2 border-on-surface text-on-surface px-8 py-4 font-headline font-bold uppercase tracking-widest text-sm hover:bg-on-surface hover:text-white transition-all">View Logs</button>
-</div>
-</div>
-<div class="col-span-12 lg:col-span-4 bg-on-surface p-8 flex flex-col justify-between manga-panel-clip">
-<div class="flex justify-between items-start">
-<span class="material-symbols-outlined text-white text-4xl" data-icon="bolt">bolt</span>
-<span class="text-surface-container-high font-headline font-black text-4xl">99%</span>
-</div>
+<div class="relative z-10 w-full max-w-4xl pt-12">
+<!-- Centered Header -->
+<div class="mb-12 flex flex-col md:flex-row items-start md:items-end justify-between gap-8 border-l-8 border-primary pl-8 relative">
 <div>
-<h3 class="text-white font-headline font-bold uppercase tracking-widest text-xs mb-2">Core Pulse</h3>
-<div class="flex gap-1 h-8 items-end">
-<div class="w-1 bg-primary h-2"></div>
-<div class="w-1 bg-primary h-4"></div>
-<div class="w-1 bg-primary h-6"></div>
-<div class="w-1 bg-primary h-3"></div>
-<div class="w-1 bg-primary h-8"></div>
-<div class="w-1 bg-primary h-5"></div>
-<div class="w-1 bg-primary h-7"></div>
-<div class="w-1 bg-primary h-4"></div>
+<span class="font-label text-[10px] tracking-[0.2em] text-primary uppercase font-bold mb-2 block">System Ready</span>
+<h1 class="text-6xl md:text-8xl font-headline font-black text-on-surface leading-none tracking-tighter uppercase relative z-10">Brief Place</h1>
+</div>
+<div class="relative flex-shrink-0 w-full md:w-[280px] h-[240px] md:h-auto overflow-visible flex items-end">
+<!-- Stylized Manga Portrait Integration -->
+<div class="relative w-full h-full">
+<div class="absolute bottom-0 right-0 w-[140%] h-[140%] translate-x-1/4 translate-y-1/4 pointer-events-none">
+<img alt="Manga Character Portrait" class="w-full h-full object-contain grayscale contrast-[1.5] brightness-105" src="https://lh3.googleusercontent.com/aida/ADBb0ujcwC4Yg8f_UngYh_Rk-jbweyxJKUv-txsB6l2YfrgVLqDHlS8hu7sGVlVhwgpaNCv9F1G55mz4ot4saAR9l-Tl-f_lhkDaDJ0NvdKqtNzfT840VFnr_Tj9zx6G32q8NIcHgMIGq--0dhh2ii1zCNM7Y9Cs-5_2cjUSBdKn6WTlg7dXi_MjTyWTOw_0W3lYfB4aZPcSnu6csYIGVx8yPJxo_wRd9Epw7soJDD-jbm-yPc2Y19hpeB7dOkTHtAuE5En9_zpDdC6tWw" style="object-position: 50% 30%; clip-path: polygon(0 0, 100% 0, 100% 85%, 0 85%); filter: grayscale(1) contrast(1.8) brightness(1.1);"/>
+</div>
+<!-- Technical Metadata Overlay -->
+<div class="absolute bottom-0 right-0 bg-on-surface text-surface text-[8px] font-headline font-bold uppercase tracking-widest px-2 py-0.5 z-20">
+      VISUAL_CORE_02
+    </div>
 </div>
 </div>
 </div>
-</div>
-<!-- Bento Dashboard -->
-<div class="grid grid-cols-12 gap-8">
-<!-- Data Stream -->
-<div class="col-span-12 md:col-span-7 bg-surface-container-low p-8">
-<div class="flex justify-between items-center mb-8">
-<h2 class="font-headline font-bold text-2xl uppercase tracking-tighter">Mission Record</h2>
-<span class="material-symbols-outlined text-on-surface-variant" data-icon="more_vert">more_vert</span>
-</div>
-<div class="space-y-6">
-<div class="group flex items-center justify-between p-4 bg-surface-container-lowest hover:bg-white transition-all cursor-pointer">
-<div class="flex items-center gap-6">
-<span class="font-headline text-3xl font-light text-outline-variant group-hover:text-primary transition-colors">01</span>
-<div>
-<h4 class="font-bold text-on-surface font-headline uppercase">Neural Interface Patch</h4>
-<p class="text-xs text-on-surface-variant font-label uppercase tracking-widest">Modified 2h ago</p>
-</div>
-</div>
-<span class="material-symbols-outlined text-primary opacity-0 group-hover:opacity-100 transition-opacity" data-icon="arrow_forward">arrow_forward</span>
-</div>
-<div class="group flex items-center justify-between p-4 bg-surface-container-lowest hover:bg-white transition-all cursor-pointer">
-<div class="flex items-center gap-6">
-<span class="font-headline text-3xl font-light text-outline-variant group-hover:text-primary transition-colors">02</span>
-<div>
-<h4 class="font-bold text-on-surface font-headline uppercase">Inkwell Script Refactor</h4>
-<p class="text-xs text-on-surface-variant font-label uppercase tracking-widest">Modified 5h ago</p>
-</div>
-</div>
-<span class="material-symbols-outlined text-primary opacity-0 group-hover:opacity-100 transition-opacity" data-icon="arrow_forward">arrow_forward</span>
-</div>
-<div class="group flex items-center justify-between p-4 bg-surface-container-lowest hover:bg-white transition-all cursor-pointer">
-<div class="flex items-center gap-6">
-<span class="font-headline text-3xl font-light text-outline-variant group-hover:text-primary transition-colors">03</span>
-<div>
-<h4 class="font-bold text-on-surface font-headline uppercase">Screentone Density Test</h4>
-<p class="text-xs text-on-surface-variant font-label uppercase tracking-widest">Modified Yesterday</p>
-</div>
-</div>
-<span class="material-symbols-outlined text-primary opacity-0 group-hover:opacity-100 transition-opacity" data-icon="arrow_forward">arrow_forward</span>
-</div>
-</div>
-</div>
-<!-- Code Terminal Preview -->
-<div class="col-span-12 md:col-span-5 bg-white p-8 border-2 border-on-surface relative">
+<!-- Typewriter Input Area -->
+<div class="bg-surface-container-lowest p-10 border-2 border-on-surface shadow-[12px_12px_0_0_rgba(27,27,27,1)] relative">
 <div class="absolute -top-3 left-6 bg-on-surface text-surface px-3 py-1 text-[10px] font-headline font-bold uppercase tracking-widest">
-                        Terminal_Output
-                    </div>
-<div class="font-mono text-sm space-y-2 mt-4 overflow-hidden">
-<div class="flex gap-2">
-<span class="text-primary font-bold">manga-mission</span>
-<span class="text-on-surface-variant">git status</span>
+                Input_Protocol
+            </div>
+<textarea autofocus="" class="w-full bg-transparent border-none focus:ring-0 text-xl md:text-2xl font-body leading-relaxed text-on-surface placeholder:text-outline-variant resize-none min-h-[400px] typewriter-cursor" placeholder="Start typing your transmission..."></textarea>
+<div class="mt-8 flex justify-between items-center pt-6 border-t border-outline-variant/20">
+<div class="flex gap-4">
+<button class="bg-primary text-on-primary px-6 py-2 font-headline font-bold uppercase tracking-widest text-xs hover:bg-primary-container transition-all">Submit Entry</button>
+<button class="bg-transparent border-2 border-on-surface text-on-surface px-6 py-2 font-headline font-bold uppercase tracking-widest text-xs hover:bg-on-surface hover:text-white transition-all">Save Draft</button>
 </div>
-<div class="text-on-surface-variant">On branch technical-inkwell</div>
-<div class="text-on-surface-variant">Changes not staged for commit:</div>
-<div class="text-tertiary ml-4">modified: core/renderer.ts</div>
-<div class="text-tertiary ml-4">modified: ui/layout_asymmetric.css</div>
-<div class="mt-4 pt-4 border-t border-outline-variant/30 flex gap-2">
-<span class="animate-pulse w-2 h-5 bg-primary"></span>
-</div>
-</div>
-<div class="mt-12 flex justify-between items-end">
-<div class="w-32 h-32 opacity-10 grayscale brightness-0">
-<img alt="Manga face background element" class="w-full h-full object-cover" data-alt="Faded manga girl character face profile used as background texture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBl7xpD3ADFt6moX7Bu4Ub7EFNMmTSFVlWwA2v614--0v3A_G9vPr9d5FZv0Aan1zOJ0lQ0lOVfjLc7R87DFodHubS_DMep28VKo7j47rorVbBvHi9tWm4HxmghfBJkFAPrj284iQMUgkxa4ibEnNpmXvQAQEFuTERJ2vMiDiGanFuNZwjWcHzUavuZGr7xsHK4i18tl-C1vdwuKl-AYGJDt9NiSvTU80y1Z32uXT-3V4CGfv052bNOUJYwj_wj6gtvjqn2vRhr1DI"/>
-</div>
-<button class="text-primary font-headline font-bold text-xs uppercase tracking-widest flex items-center gap-2 hover:translate-x-1 transition-transform">
-                            Full Terminal <span class="material-symbols-outlined text-sm" data-icon="terminal">terminal</span>
-</button>
-</div>
+<span class="font-label text-[10px] text-on-surface-variant uppercase tracking-widest">Words: 0 / Auto-sync enabled</span>
 </div>
 </div>
 <!-- Footer Meta -->
-<footer class="mt-20 py-8 border-t border-outline-variant flex flex-col md:flex-row justify-between items-center gap-6">
+<footer class="mt-24 py-8 border-t border-outline-variant flex flex-col md:flex-row justify-between items-center gap-6 w-full">
 <div class="flex items-center gap-4">
-<span class="text-2xl font-black uppercase tracking-tighter text-[#1b1b1b] font-headline">Manga Mission</span>
+<span class="text-2xl font-black uppercase tracking-tighter text-[#1b1b1b] font-headline">Brief Place</span>
 <span class="text-[10px] text-on-surface-variant font-label uppercase tracking-widest bg-surface-container px-2 py-1">Ver 2.0.4 - technical inkwell</span>
 </div>
 <div class="flex gap-8">
@@ -276,8 +212,8 @@
 </footer>
 </div>
 </main>
-<!-- Contextual FAB (Suppressed on settings/details, only for main dash) -->
+<!-- Contextual FAB -->
 <button class="fixed bottom-8 right-8 w-16 h-16 bg-on-surface text-surface flex items-center justify-center hover:bg-primary transition-colors active:scale-95 shadow-xl z-50">
-<span class="material-symbols-outlined text-3xl" data-icon="edit" style="font-variation-settings: 'FILL' 1;">edit</span>
+<span class="material-symbols-outlined text-3xl">edit</span>
 </button>
 </body></html>
