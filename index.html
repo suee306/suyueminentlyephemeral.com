@@ -355,6 +355,7 @@
       ========================= */
       let currentTab = "record";
       let currentLoadedNoteId = null; // 当前编辑器里加载的笔记 id（用于删除时联动清空）
+      const API_BASE = "/api";
 
       /* ========================
          DOM 获取
@@ -543,18 +544,16 @@
         }
 
         if (clearAllBtn) {
-          clearAllBtn.addEventListener("click", () => {
+          clearAllBtn.addEventListener("click", async () => {
             if (!confirm("确定清空草稿和所有已提交笔记吗？")) return;
             localStorage.removeItem("draft");
-            localStorage.removeItem("notes");
-            // 兼容旧版本的 entries 数据（如果之前已生成过）
-            localStorage.removeItem("entries");
-            if (tagsInput) tagsInput.value = "";
             textarea.value = "";
+            if (tagsInput) tagsInput.value = "";
+            currentLoadedNoteId = null;
+            await clearAllNotesFromServer();
             updateWordCount();
             renderPreview();
-            currentLoadedNoteId = null;
-            renderEntries();
+            await renderEntries();
           });
         }
       }
@@ -666,7 +665,7 @@
       }
 
       // 提交内容
-      function submitEntry() {
+      async function submitEntry() {
         if (textarea.disabled) return;
 
         const content = textarea.value.trim();
@@ -675,27 +674,14 @@
           return;
         }
 
-        let notes;
-        try {
-          notes = JSON.parse(localStorage.getItem("notes") || "[]");
-          if (!Array.isArray(notes)) notes = [];
-        } catch {
-          notes = [];
-        }
-
         const tags = (tagsInput?.value || "").trim();
-        const id =
-          (typeof crypto !== "undefined" && crypto.randomUUID)
-            ? crypto.randomUUID()
-            : `${Date.now()}_${Math.random().toString(16).slice(2)}`;
-        notes.unshift({
-          id,
-          content,
-          tags,
-          time: new Date().toLocaleString(),
-        });
 
-        localStorage.setItem("notes", JSON.stringify(notes));
+        try {
+          await createNoteOnServer({ content, tags });
+        } catch (error) {
+          alert(error?.message || "提交失败，请稍后重试");
+          return;
+        }
 
         alert("提交成功 ✅");
         textarea.value = "";
@@ -704,7 +690,7 @@
         currentLoadedNoteId = null;
         updateWordCount();
         renderPreview();
-        renderEntries();
+        await renderEntries();
       }
 
       // 新建
@@ -721,30 +707,21 @@
         }
       }
 
-      function renderEntries() {
+      async function renderEntries() {
         if (currentTab === "settings") return;
         if (!notesDiv || !archiveTitle || !archiveCount || !emptyState) return;
 
-        const raw = localStorage.getItem("notes") || "[]";
-        let notes;
+        let notes = [];
         try {
-          notes = JSON.parse(raw);
-          if (!Array.isArray(notes)) notes = [];
-        } catch {
-          notes = [];
+          notes = await fetchNotesFromServer();
+        } catch (error) {
+          notesDiv.innerHTML = "";
+          emptyState.classList.remove("hidden");
+          emptyState.textContent = error?.message || "Failed to load notes.";
+          archiveTitle.innerText = "Notes Archive";
+          archiveCount.innerText = "0 notes";
+          return;
         }
-
-        // 兼容旧数据：给历史里没有 id 的 note 补上
-        let idsChanged = false;
-        notes.forEach((n) => {
-          if (!n || n.id) return;
-          idsChanged = true;
-          n.id =
-            (typeof crypto !== "undefined" && crypto.randomUUID)
-              ? crypto.randomUUID()
-              : `${Date.now()}_${Math.random().toString(16).slice(2)}`;
-        });
-        if (idsChanged) localStorage.setItem("notes", JSON.stringify(notes));
 
         const normalizedQuery = (topSearchInput?.value || "").trim().toLowerCase();
 
@@ -763,6 +740,7 @@
 
         if (filtered.length === 0) {
           emptyState.classList.remove("hidden");
+          emptyState.textContent = "No notes yet. Type something and click `Submit Entry`.";
           return;
         }
         emptyState.classList.add("hidden");
@@ -796,7 +774,6 @@
             <div class="text-xs text-blue-500">${tagsText}</div>
           `;
 
-          // Click a card to load it back into the editor.
           card.addEventListener("click", () => loadNote(n));
           card.addEventListener("keydown", (e) => {
             if (e.key === "Enter" || e.key === " ") {
@@ -808,14 +785,13 @@
 
           notesDiv.appendChild(card);
 
-          // Delete button click (不要触发 card click）
           const deleteBtn = card.querySelector("[data-delete-note]");
-          deleteBtn?.addEventListener("click", (e) => {
+          deleteBtn?.addEventListener("click", async (e) => {
             e.preventDefault();
             e.stopPropagation();
             const id = deleteBtn.getAttribute("data-delete-note");
             if (!id) return;
-            deleteNoteById(id);
+            await deleteNoteById(id);
           });
         });
       }
@@ -857,21 +833,16 @@
         });
       }
 
-      function deleteNoteById(noteId) {
+      async function deleteNoteById(noteId) {
         if (!noteId) return;
         if (!confirm("删除这条留言吗？")) return;
 
-        const raw = localStorage.getItem("notes") || "[]";
-        let notes;
         try {
-          notes = JSON.parse(raw);
-          if (!Array.isArray(notes)) notes = [];
-        } catch {
-          notes = [];
+          await deleteNoteOnServer(noteId);
+        } catch (error) {
+          alert(error?.message || "删除失败，请稍后重试");
+          return;
         }
-
-        const next = notes.filter((n) => String(n?.id || "") !== String(noteId));
-        localStorage.setItem("notes", JSON.stringify(next));
 
         if (currentLoadedNoteId && String(currentLoadedNoteId) === String(noteId)) {
           textarea.value = "";
@@ -882,10 +853,53 @@
           renderPreview();
         }
 
-        renderEntries();
+        await renderEntries();
+      }
+
+      async function fetchNotesFromServer() {
+        const res = await fetch(`${API_BASE}/notes`);
+        if (!res.ok) {
+          throw new Error("无法加载服务器笔记");
+        }
+        const data = await res.json();
+        if (!Array.isArray(data)) return [];
+        return data;
+      }
+
+      async function createNoteOnServer(payload) {
+        const res = await fetch(`${API_BASE}/notes`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        if (!res.ok) {
+          throw new Error("提交失败");
+        }
+
+        return res.json();
+      }
+
+      async function deleteNoteOnServer(noteId) {
+        const res = await fetch(`${API_BASE}/notes/${encodeURIComponent(noteId)}`, {
+          method: "DELETE",
+        });
+
+        if (!res.ok) {
+          throw new Error("删除失败");
+        }
+      }
+
+      async function clearAllNotesFromServer() {
+        const res = await fetch(`${API_BASE}/notes`, {
+          method: "DELETE",
+        });
+
+        if (!res.ok) {
+          throw new Error("清空失败");
+        }
       }
     </script>
   </body>
 </html>
-
 
