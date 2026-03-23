@@ -1,30 +1,31 @@
-async function login() {
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
+const API = "https://suyu-web.onrender.com"; // 可用可不用
 
-  const res = await fetch(API + "/login", {
+const input = document.getElementById("input");
+const preview = document.getElementById("preview");
+
+/* 实时预览 */
+input.addEventListener("input", () => {
+  preview.innerHTML = marked.parse(input.value);
+});
+
+/* 插入图片 */
+async function uploadImage() {
+  const file = document.getElementById("image").files[0];
+  const formData = new FormData();
+  formData.append("image", file);
+
+  const res = await fetch(API + "/upload", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password })
+    body: formData
   });
 
   const data = await res.json();
 
-  console.log("登录返回：", data); // 👈 看这里
-
-  if (!data.token) {
-    alert("登录失败");
-    return;
-  }
-
-  token = data.token;
-
-  alert("登录成功"); // 👈 你应该看到这个
-
-  document.getElementById("auth").style.display = "none";
-  document.getElementById("app").style.display = "block";
-
-  loadNotes();
+  input.value += `\n![image](${data.url})\n`;
+  preview.innerHTML = marked.parse(input.value);
 }
-  });
+
+/* 左侧切换 */
+function switchTab(tab) {
+  alert("切换到：" + tab);
 }
