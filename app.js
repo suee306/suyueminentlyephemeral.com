@@ -60,3 +60,6 @@ function loadNotes() {
 function toggleDark() {
   document.documentElement.classList.toggle("dark");
 }
+
+  document.documentElement.classList.toggle("dark");
+}
