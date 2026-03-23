@@ -1,18 +1,24 @@
 <!DOCTYPE html>
-
-<html class="light" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Brief Place - Technical Inkwell</title>
-<!-- Fonts -->
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<!-- Material Symbols -->
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<!-- Tailwind CSS -->
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script id="tailwind-config">
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Brief Place - Technical Inkwell</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Material Symbols -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
         theme: {
@@ -47,7 +53,6 @@
               "on-primary": "#ffffff",
               "outline-variant": "#c1c6d7",
               "tertiary-fixed": "#ffdbcc",
-              "on-secondary": "#ffffff",
               "inverse-surface": "#303030",
               "on-tertiary-fixed-variant": "#7c2e00",
               "surface-container-highest": "#e2e2e2",
@@ -64,295 +69,328 @@
               "surface-bright": "#f9f9f9",
               "primary-container": "#0070eb",
               "primary": "#0058bc",
-              "on-secondary-fixed-variant": "#26467d"
+              "on-secondary-fixed-variant": "#26467d",
             },
             fontFamily: {
-              "headline": ["Space Grotesk"],
-              "body": ["Inter"],
-              "label": ["Inter"]
+              headline: ["Space Grotesk"],
+              body: ["Inter"],
+              label: ["Inter"],
             },
-            borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px"},
+            borderRadius: { DEFAULT: "0px", lg: "0px", xl: "0px", full: "9999px" },
           },
         },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+      }
+      .manga-texture {
+        background-image: radial-gradient(#1b1b1b 0.5px, transparent 0.5px);
+        background-size: 4px 4px;
+        opacity: 0.05;
+      }
+      .ink-focus:focus {
+        border-bottom-width: 3px;
+        border-color: #0058bc;
+        outline: none;
+      }
+      .typewriter-cursor::after {
+        content: "";
+        display: inline-block;
+        width: 12px;
+        height: 24px;
+        background-color: #0058bc;
+        margin-left: 4px;
+        vertical-align: middle;
+        animation: blink 1s step-end infinite;
+      }
+      @keyframes blink {
+        from,
+        to {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+      }
+      .manga-portrait-mask {
+        mask-image: linear-gradient(to bottom, black 80%, transparent 100%),
+          linear-gradient(to right, black 80%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%),
+          linear-gradient(to right, black 80%, transparent 100%);
+      }
+    </style>
+  </head>
+  <body class="bg-background font-body text-on-surface selection:bg-primary selection:text-white">
+    <!-- TopNavBar -->
+    <header
+      class="fixed top-0 w-full flex justify-between items-center px-6 h-16 bg-white dark:bg-[#1b1b1b] border-b-2 border-[#1b1b1b]/10 dark:border-white/10 z-50"
+    >
+      <div class="flex items-center gap-8">
+        <span class="text-2xl font-black uppercase tracking-tighter text-[#1b1b1b] dark:text-white font-headline">Brief Place</span>
+        <nav class="hidden md:flex gap-6 h-full">
+          <a class="flex items-center text-[#0058bc] border-b-4 border-[#0058bc] pb-1 font-headline font-bold tracking-tight" href="#">Explore</a>
+          <a class="flex items-center text-[#1b1b1b] dark:text-white opacity-70 hover:bg-[#f9f9f9] dark:hover:bg-white/5 transition-colors font-headline font-bold tracking-tight" href="#">Mission</a>
+          <a class="flex items-center text-[#1b1b1b] dark:text-white opacity-70 hover:bg-[#f9f9f9] dark:hover:bg-white/5 transition-colors font-headline font-bold tracking-tight" href="#">Archive</a>
+        </nav>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="relative hidden sm:block">
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+          <input class="bg-surface-container-low border-b-2 border-outline-variant py-1.5 pl-10 pr-4 text-sm w-64 ink-focus transition-all" placeholder="what you want know about me" type="text" />
+        </div>
+      </div>
+    </header>
+
+    <!-- SideNavBar -->
+    <aside
+      class="fixed left-0 top-16 h-[calc(100vh-64px)] flex flex-col p-4 w-64 bg-white/70 dark:bg-[#1b1b1b]/70 backdrop-blur-xl shadow-[64px_0_64px_-20px_rgba(27,27,27,0.04)] z-40"
+    >
+      <div class="mb-8 px-2 flex items-center gap-3">
+        <div class="w-12 h-12 bg-surface-container-high overflow-hidden">
+          <img
+            alt="Suyu illustration"
+            class="w-full h-full object-cover grayscale brightness-110"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXo6ISBN_maUj4qeZuvT8maRdAM847sl6IVWz5T8swUWTyDeMYcD69WHwjdQlCm0zQkiQ3gKZsWc1c8e5B0X04sRQZo8m81_T0r6h8-zEgRinUctUnn5gxJjeOlKcDr4jfU5rOvDCSCWTW8ZTwdB8h0CzSVAy_fM4Az1LC4C2-yARjG7XIcZyA_rvN6LEEfx1aVabyQc0GM1SsNwIhQFcxq-NjxI1PeUoZaEBNDF71twWsjsl5u_f759Fa0q3mb5PUAIcqsVO7FhQ"
+          />
+        </div>
+        <div>
+          <h2 class="text-xl font-black text-[#1b1b1b] dark:text-white font-headline leading-none">Suyu</h2>
+          <p class="font-['Space_Grotesk'] uppercase tracking-widest text-[11px] text-primary mt-1">Technical Inkwell</p>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2 flex-grow">
+        <a class="flex items-center gap-4 px-4 py-3 bg-[#0058bc] text-white font-bold hover:translate-x-1 transition-transform duration-200 group border-l-4 border-[#9e3d00]" href="#">
+          <span class="material-symbols-outlined">edit_note</span>
+          <span class="font-headline tracking-widest text-[11px] uppercase">Record</span>
+        </a>
+        <a class="flex items-center gap-4 px-4 py-3 text-[#1b1b1b] dark:text-white hover:bg-[#f9f9f9] hover:translate-x-1 transition-transform duration-200" href="#">
+          <span class="material-symbols-outlined">terminal</span>
+          <span class="font-headline tracking-widest text-[11px] uppercase">Code</span>
+        </a>
+        <button
+          class="mt-6 mx-2 py-3 bg-on-surface text-surface font-headline font-bold uppercase tracking-widest text-[12px] flex items-center justify-center gap-2 hover:bg-primary transition-colors"
+          type="button"
+        >
+          <span class="material-symbols-outlined text-sm">add</span>
+          New Entry
+        </button>
+      </div>
+
+      <div class="mt-auto pt-4 border-t border-outline-variant/20">
+        <a class="flex items-center gap-4 px-4 py-3 text-[#1b1b1b] dark:text-white hover:bg-[#f9f9f9] hover:translate-x-1 transition-transform duration-200" href="#">
+          <span class="material-symbols-outlined">settings</span>
+          <span class="font-headline tracking-widest text-[11px] uppercase">Settings</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content Canvas -->
+    <main class="ml-64 mt-16 p-8 min-h-screen relative overflow-hidden flex flex-col items-center">
+      <!-- Background Textures -->
+      <div class="absolute inset-0 manga-texture pointer-events-none"></div>
+      <div class="relative z-10 w-full max-w-4xl pt-12">
+        <!-- Centered Header -->
+        <div class="mb-12 flex flex-col md:flex-row items-start md:items-end justify-between gap-8 border-l-8 border-primary pl-8 relative">
+          <div>
+            <span class="font-label text-[10px] tracking-[0.2em] text-primary uppercase font-bold mb-2 block">System Ready</span>
+            <h1 class="text-6xl md:text-8xl font-headline font-black text-on-surface leading-none tracking-tighter uppercase relative z-10">Brief Place</h1>
+          </div>
+          <div class="relative flex-shrink-0 w-full md:w-[280px] h-[240px] md:h-auto overflow-visible flex items-end">
+            <!-- Stylized Manga Portrait Integration -->
+            <div class="relative w-full h-full">
+              <div class="absolute bottom-0 right-0 w-[140%] h-[140%] translate-x-1/4 translate-y-1/4 pointer-events-none">
+                <img
+                  alt="Manga Character Portrait"
+                  class="w-full h-full object-contain grayscale contrast-[1.5] brightness-105"
+                  src="https://lh3.googleusercontent.com/aida/ADBb0ujcwC4Yg8f_UngYh_Rk-jbweyxJKUv-txsB6l2YfrgVLqDHlS8hu7sGVlVhwgpaNCv9F1G55mz4ot4saAR9l-Tl-f_lhkDaDJ0NvdKqtNzfT840VFnr_Tj9zx6G32q8NIcHgMIGq--0dhh2ii1zCNM7Y9Cs-5_2cjUSBdKn6WTlg7dXi_MjTyWTOw_0W3lYfB4aZPcSnu6csYIGVx8yPJxo_wRd9Epw7soJDD-jbm-yPc2Y19hpeB7dOkTHtAuE5En9_zpDdC6tWw"
+                  style="object-position: 50% 30%; clip-path: polygon(0 0, 100% 0, 100% 85%, 0 85%); filter: grayscale(1) contrast(1.8) brightness(1.1)"
+                />
+              </div>
+              <!-- Technical Metadata Overlay -->
+              <div class="absolute bottom-0 right-0 bg-on-surface text-surface text-[8px] font-headline font-bold uppercase tracking-widest px-2 py-0.5 z-20">
+                VISUAL_CORE_02
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Typewriter Input Area -->
+        <div class="bg-surface-container-lowest p-10 border-2 border-on-surface shadow-[12px_12px_0_0_rgba(27,27,27,1)] relative">
+          <div class="absolute -top-3 left-6 bg-on-surface text-surface px-3 py-1 text-[10px] font-headline font-bold uppercase tracking-widest">
+            Input_Protocol
+          </div>
+          <textarea
+            autofocus
+            class="w-full bg-transparent border-none focus:ring-0 text-xl md:text-2xl font-body leading-relaxed text-on-surface placeholder:text-outline-variant resize-none min-h-[400px] typewriter-cursor"
+            placeholder="Start typing your transmission..."
+          ></textarea>
+          <div class="mt-8 flex justify-between items-center pt-6 border-t border-outline-variant/20">
+            <div class="flex gap-4">
+              <button class="bg-primary text-on-primary px-6 py-2 font-headline font-bold uppercase tracking-widest text-xs hover:bg-primary-container transition-all" type="button">
+                Submit Entry
+              </button>
+              <button class="bg-transparent border-2 border-on-surface text-on-surface px-6 py-2 font-headline font-bold uppercase tracking-widest text-xs hover:bg-on-surface hover:text-white transition-all" type="button">
+                Save Draft
+              </button>
+            </div>
+            <span data-words class="font-label text-[10px] text-on-surface-variant uppercase tracking-widest">Words: 0 / Auto-sync enabled</span>
+          </div>
+        </div>
+
+        <!-- Footer Meta -->
+        <footer class="mt-24 py-8 border-t border-outline-variant flex flex-col md:flex-row justify-between items-center gap-6 w-full">
+          <div class="flex items-center gap-4">
+            <span class="text-2xl font-black uppercase tracking-tighter text-[#1b1b1b] font-headline">Brief Place</span>
+            <span class="text-[10px] text-on-surface-variant font-label uppercase tracking-widest bg-surface-container px-2 py-1">Ver 2.0.4 - technical inkwell</span>
+          </div>
+          <div class="flex gap-8">
+            <a class="text-[10px] text-on-surface-variant font-label uppercase tracking-[0.2em] hover:text-primary transition-colors" href="#">Protocol</a>
+            <a class="text-[10px] text-on-surface-variant font-label uppercase tracking-[0.2em] hover:text-primary transition-colors" href="#">Archive</a>
+            <a class="text-[10px] text-on-surface-variant font-label uppercase tracking-[0.2em] hover:text-primary transition-colors" href="#">Security</a>
+          </div>
+        </footer>
+      </div>
+    </main>
+
+    <!-- Contextual FAB -->
+    <button class="fixed bottom-8 right-8 w-16 h-16 bg-on-surface text-surface flex items-center justify-center hover:bg-primary transition-colors active:scale-95 shadow-xl z-50" type="button">
+      <span class="material-symbols-outlined text-3xl">edit</span>
+    </button>
+
+    <script>
+      /* ========================
+         全局状态
+      ========================= */
+      let currentTab = "record";
+
+      /* ========================
+         DOM 获取
+      ========================= */
+      const textarea = document.querySelector("textarea");
+      const wordCounter = document.querySelector("[data-words]");
+      const submitBtn = document.querySelector("button.bg-primary");
+      const saveBtn = document.querySelector("button.border-2");
+      const newEntryBtn = document.querySelector("aside button");
+      const fabBtn = document.querySelector(".fixed.bottom-8");
+      const navLinks = document.querySelectorAll("aside a");
+
+      /* ========================
+         初始化
+      ========================= */
+      init();
+
+      function init() {
+        loadDraft();
+        updateWordCount();
+        bindEvents();
+      }
+
+      /* ========================
+         事件绑定
+      ========================= */
+      function bindEvents() {
+        textarea.addEventListener("input", () => {
+          updateWordCount();
+          autoSave();
+        });
+
+        submitBtn.addEventListener("click", submitEntry);
+        saveBtn.addEventListener("click", saveDraft);
+
+        newEntryBtn.addEventListener("click", newEntry);
+        fabBtn.addEventListener("click", newEntry);
+
+        navLinks.forEach((link) => {
+          link.addEventListener("click", (e) => {
+            e.preventDefault();
+            const tabText = link.textContent.trim().toLowerCase();
+            switchTab(tabText, link);
+          });
+        });
+      }
+
+      /* ========================
+         功能逻辑
+      ========================= */
+
+      // 切换页面（这里对应改变 textarea 的 placeholder + 高亮侧边栏）
+      function switchTab(tabText, clickedLink) {
+        currentTab = tabText;
+
+        navLinks.forEach((link) => {
+          link.classList.remove("bg-[#0058bc]", "text-white");
+        });
+        if (clickedLink) {
+          clickedLink.classList.add("bg-[#0058bc]", "text-white");
+        }
+
+        if (tabText.includes("code")) {
+          textarea.placeholder = "Write your code...";
+        } else if (tabText.includes("settings")) {
+          textarea.placeholder = "Settings panel (coming soon)";
+        } else {
+          textarea.placeholder = "Start typing your transmission...";
+        }
+      }
+
+      // 字数统计
+      function updateWordCount() {
+        const text = textarea.value.trim();
+        const words = text ? text.split(/\s+/).filter(Boolean).length : 0;
+        if (wordCounter) {
+          wordCounter.innerText = `Words: ${words} / Auto-sync enabled`;
+        }
+      }
+
+      // 保存草稿
+      function saveDraft() {
+        localStorage.setItem("draft", textarea.value);
+        alert("Draft saved");
+      }
+
+      // 自动保存
+      function autoSave() {
+        localStorage.setItem("draft", textarea.value);
+      }
+
+      // 读取草稿
+      function loadDraft() {
+        const draft = localStorage.getItem("draft");
+        if (draft) textarea.value = draft;
+      }
+
+      // 提交内容
+      function submitEntry() {
+        const content = textarea.value.trim();
+        if (!content) {
+          alert("内容为空");
+          return;
+        }
+
+        let entries = JSON.parse(localStorage.getItem("entries") || "[]");
+        entries.push({
+          content,
+          time: new Date().toLocaleString(),
+        });
+        localStorage.setItem("entries", JSON.stringify(entries));
+
+        alert("提交成功 ✅");
+        textarea.value = "";
+        localStorage.setItem("draft", "");
+        updateWordCount();
+      }
+
+      // 新建
+      function newEntry() {
+        if (confirm("清空当前内容？")) {
+          textarea.value = "";
+          localStorage.setItem("draft", "");
+          updateWordCount();
+        }
       }
     </script>
-<style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        .manga-texture {
-            background-image: radial-gradient(#1b1b1b 0.5px, transparent 0.5px);
-            background-size: 4px 4px;
-            opacity: 0.05;
-        }
-        .ink-focus:focus {
-            border-bottom-width: 3px;
-            border-color: #0058bc;
-            outline: none;
-        }
-        .typewriter-cursor::after {
-            content: '';
-            display: inline-block;
-            width: 12px;
-            height: 24px;
-            background-color: #0058bc;
-            margin-left: 4px;
-            vertical-align: middle;
-            animation: blink 1s step-end infinite;
-        }
-        @keyframes blink {
-            from, to { opacity: 1; }
-            50% { opacity: 0; }
-        }
-        .manga-portrait-mask {
-            mask-image: linear-gradient(to bottom, black 80%, transparent 100%), linear-gradient(to right, black 80%, transparent 100%);
-            -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%), linear-gradient(to right, black 80%, transparent 100%);
-        }
-    </style>
-</head>
-<body class="bg-background font-body text-on-surface selection:bg-primary selection:text-white">
-<!-- TopNavBar -->
-<header class="fixed top-0 w-full flex justify-between items-center px-6 h-16 bg-white dark:bg-[#1b1b1b] border-b-2 border-[#1b1b1b]/10 dark:border-white/10 z-50">
-<div class="flex items-center gap-8">
-<span class="text-2xl font-black uppercase tracking-tighter text-[#1b1b1b] dark:text-white font-headline">Brief Place</span>
-<nav class="hidden md:flex gap-6 h-full">
-<a class="flex items-center text-[#0058bc] border-b-4 border-[#0058bc] pb-1 font-headline font-bold tracking-tight" href="#">Explore</a>
-<a class="flex items-center text-[#1b1b1b] dark:text-white opacity-70 hover:bg-[#f9f9f9] dark:hover:bg-white/5 transition-colors font-headline font-bold tracking-tight" href="#">Mission</a>
-<a class="flex items-center text-[#1b1b1b] dark:text-white opacity-70 hover:bg-[#f9f9f9] dark:hover:bg-white/5 transition-colors font-headline font-bold tracking-tight" href="#">Archive</a>
-</nav>
-</div>
-<div class="flex items-center gap-4">
-<div class="relative hidden sm:block">
-<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
-<input class="bg-surface-container-low border-b-2 border-outline-variant py-1.5 pl-10 pr-4 text-sm w-64 ink-focus transition-all" placeholder="what you want know about me" type="text"/>
-</div>
-</div>
-</header>
-<!-- SideNavBar -->
-<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] flex flex-col p-4 w-64 bg-white/70 dark:bg-[#1b1b1b]/70 backdrop-blur-xl shadow-[64px_0_64px_-20px_rgba(27,27,27,0.04)] z-40">
-<div class="mb-8 px-2 flex items-center gap-3">
-<div class="w-12 h-12 bg-surface-container-high overflow-hidden">
-<img alt="Suyu illustration" class="w-full h-full object-cover grayscale brightness-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXo6ISBN_maUj4qeZuvT8maRdAM847sl6IVWz5T8swUWTyDeMYcD69WHwjdQlCm0zQkiQ3gKZsWc1c8e5B0X04sRQZo8m81_T0r6h8-zEgRinUctUnn5gxJjeOlKcDr4jfU5rOvDCSCWTW8ZTwdB8h0CzSVAy_fM4Az1LC4C2-yARjG7XIcZyA_rvN6LEEfx1aVabyQc0GM1SsNwIhQFcxq-NjxI1PeUoZaEBNDF71twWsjsl5u_f759Fa0q3mb5PUAIcqsVO7FhQ"/>
-</div>
-<div>
-<h2 class="text-xl font-black text-[#1b1b1b] dark:text-white font-headline leading-none">Suyu</h2>
-<p class="font-['Space_Grotesk'] uppercase tracking-widest text-[11px] text-primary mt-1">Technical Inkwell</p>
-</div>
-</div>
-<div class="flex flex-col gap-2 flex-grow">
-<a class="flex items-center gap-4 px-4 py-3 bg-[#0058bc] text-white font-bold hover:translate-x-1 transition-transform duration-200 group border-l-4 border-[#9e3d00]" href="#">
-<span class="material-symbols-outlined">edit_note</span>
-<span class="font-headline tracking-widest text-[11px] uppercase">Record</span>
-</a>
-<a class="flex items-center gap-4 px-4 py-3 text-[#1b1b1b] dark:text-white hover:bg-[#f9f9f9] hover:translate-x-1 transition-transform duration-200" href="#">
-<span class="material-symbols-outlined">terminal</span>
-<span class="font-headline tracking-widest text-[11px] uppercase">Code</span>
-</a>
-<button class="mt-6 mx-2 py-3 bg-on-surface text-surface font-headline font-bold uppercase tracking-widest text-[12px] flex items-center justify-center gap-2 hover:bg-primary transition-colors">
-<span class="material-symbols-outlined text-sm">add</span>
-                New Entry
-            </button>
-</div>
-<div class="mt-auto pt-4 border-t border-outline-variant/20">
-<a class="flex items-center gap-4 px-4 py-3 text-[#1b1b1b] dark:text-white hover:bg-[#f9f9f9] hover:translate-x-1 transition-transform duration-200" href="#">
-<span class="material-symbols-outlined">settings</span>
-<span class="font-headline tracking-widest text-[11px] uppercase">Settings</span>
-</a>
-</div>
-</aside>
-<!-- Main Content Canvas -->
-<main class="ml-64 mt-16 p-8 min-h-screen relative overflow-hidden flex flex-col items-center">
-<!-- Background Textures -->
-<div class="absolute inset-0 manga-texture pointer-events-none"></div>
-<div class="relative z-10 w-full max-w-4xl pt-12">
-<!-- Centered Header -->
-<div class="mb-12 flex flex-col md:flex-row items-start md:items-end justify-between gap-8 border-l-8 border-primary pl-8 relative">
-<div>
-<span class="font-label text-[10px] tracking-[0.2em] text-primary uppercase font-bold mb-2 block">System Ready</span>
-<h1 class="text-6xl md:text-8xl font-headline font-black text-on-surface leading-none tracking-tighter uppercase relative z-10">Brief Place</h1>
-</div>
-<div class="relative flex-shrink-0 w-full md:w-[280px] h-[240px] md:h-auto overflow-visible flex items-end">
-<!-- Stylized Manga Portrait Integration -->
-<div class="relative w-full h-full">
-<div class="absolute bottom-0 right-0 w-[140%] h-[140%] translate-x-1/4 translate-y-1/4 pointer-events-none">
-<img alt="Manga Character Portrait" class="w-full h-full object-contain grayscale contrast-[1.5] brightness-105" src="https://lh3.googleusercontent.com/aida/ADBb0ujcwC4Yg8f_UngYh_Rk-jbweyxJKUv-txsB6l2YfrgVLqDHlS8hu7sGVlVhwgpaNCv9F1G55mz4ot4saAR9l-Tl-f_lhkDaDJ0NvdKqtNzfT840VFnr_Tj9zx6G32q8NIcHgMIGq--0dhh2ii1zCNM7Y9Cs-5_2cjUSBdKn6WTlg7dXi_MjTyWTOw_0W3lYfB4aZPcSnu6csYIGVx8yPJxo_wRd9Epw7soJDD-jbm-yPc2Y19hpeB7dOkTHtAuE5En9_zpDdC6tWw" style="object-position: 50% 30%; clip-path: polygon(0 0, 100% 0, 100% 85%, 0 85%); filter: grayscale(1) contrast(1.8) brightness(1.1);"/>
-</div>
-<!-- Technical Metadata Overlay -->
-<div class="absolute bottom-0 right-0 bg-on-surface text-surface text-[8px] font-headline font-bold uppercase tracking-widest px-2 py-0.5 z-20">
-      VISUAL_CORE_02
-    </div>
-</div>
-</div>
-</div>
-<!-- Typewriter Input Area -->
-<div class="bg-surface-container-lowest p-10 border-2 border-on-surface shadow-[12px_12px_0_0_rgba(27,27,27,1)] relative">
-<div class="absolute -top-3 left-6 bg-on-surface text-surface px-3 py-1 text-[10px] font-headline font-bold uppercase tracking-widest">
-                Input_Protocol
-            </div>
-<textarea autofocus="" class="w-full bg-transparent border-none focus:ring-0 text-xl md:text-2xl font-body leading-relaxed text-on-surface placeholder:text-outline-variant resize-none min-h-[400px] typewriter-cursor" placeholder="Start typing your transmission..."></textarea>
-<div class="mt-8 flex justify-between items-center pt-6 border-t border-outline-variant/20">
-<div class="flex gap-4">
-<button class="bg-primary text-on-primary px-6 py-2 font-headline font-bold uppercase tracking-widest text-xs hover:bg-primary-container transition-all">Submit Entry</button>
-<button class="bg-transparent border-2 border-on-surface text-on-surface px-6 py-2 font-headline font-bold uppercase tracking-widest text-xs hover:bg-on-surface hover:text-white transition-all">Save Draft</button>
-</div>
-<span class="font-label text-[10px] text-on-surface-variant uppercase tracking-widest">Words: 0 / Auto-sync enabled</span>
-</div>
-</div>
-<!-- Footer Meta -->
-<footer class="mt-24 py-8 border-t border-outline-variant flex flex-col md:flex-row justify-between items-center gap-6 w-full">
-<div class="flex items-center gap-4">
-<span class="text-2xl font-black uppercase tracking-tighter text-[#1b1b1b] font-headline">Brief Place</span>
-<span class="text-[10px] text-on-surface-variant font-label uppercase tracking-widest bg-surface-container px-2 py-1">Ver 2.0.4 - technical inkwell</span>
-</div>
-<div class="flex gap-8">
-<a class="text-[10px] text-on-surface-variant font-label uppercase tracking-[0.2em] hover:text-primary transition-colors" href="#">Protocol</a>
-<a class="text-[10px] text-on-surface-variant font-label uppercase tracking-[0.2em] hover:text-primary transition-colors" href="#">Archive</a>
-<a class="text-[10px] text-on-surface-variant font-label uppercase tracking-[0.2em] hover:text-primary transition-colors" href="#">Security</a>
-</div>
-</footer>
-</div>
-</main>
-<!-- Contextual FAB -->
-<button class="fixed bottom-8 right-8 w-16 h-16 bg-on-surface text-surface flex items-center justify-center hover:bg-primary transition-colors active:scale-95 shadow-xl z-50">
-<span class="material-symbols-outlined text-3xl">edit</span>
-</button>
-      <script>
-/* ========================
-   全局状态
-======================== */
-let currentTab = "record";
-
-/* ========================
-   DOM 获取
-======================== */
-const textarea = document.querySelector("textarea");
-const wordCounter = document.querySelector("[data-words]");
-const submitBtn = document.querySelector("button.bg-primary");
-const saveBtn = document.querySelector("button.border-2");
-const newEntryBtn = document.querySelector("aside button");
-const fabBtn = document.querySelector(".fixed.bottom-8");
-const navLinks = document.querySelectorAll("aside a");
-
-/* ========================
-   初始化
-======================== */
-init();
-
-function init() {
-  loadDraft();
-  updateWordCount();
-  bindEvents();
-}
-
-/* ========================
-   事件绑定
-======================== */
-function bindEvents() {
-
-  // 输入监听
-  textarea.addEventListener("input", () => {
-    updateWordCount();
-    autoSave();
-  });
-
-  // 提交
-  submitBtn.addEventListener("click", submitEntry);
-
-  // 保存草稿
-  saveBtn.addEventListener("click", saveDraft);
-
-  // 新建
-  newEntryBtn.addEventListener("click", newEntry);
-  fabBtn.addEventListener("click", newEntry);
-
-  // 侧栏点击
-  navLinks.forEach(link => {
-    link.addEventListener("click", (e) => {
-      e.preventDefault();
-      switchTab(link.innerText.trim().toLowerCase());
-    });
-  });
-}
-
-/* ========================
-   功能逻辑
-======================== */
-
-// 切换页面
-function switchTab(tab) {
-  currentTab = tab;
-
-  // UI高亮
-  navLinks.forEach(link => {
-    link.classList.remove("bg-[#0058bc]", "text-white");
-  });
-
-  event.currentTarget.classList.add("bg-[#0058bc]", "text-white");
-
-  // 内容切换
-  if (tab.includes("code")) {
-    textarea.placeholder = "Write your code...";
-  } else if (tab.includes("settings")) {
-    textarea.placeholder = "Settings panel (coming soon)";
-  } else {
-    textarea.placeholder = "Start typing your transmission...";
-  }
-}
-
-// 字数统计
-function updateWordCount() {
-  const text = textarea.value.trim();
-  const words = text ? text.split(/\s+/).length : 0;
-
-  document.querySelector("span.font-label").innerText =
-    `Words: ${words} / Auto-sync enabled`;
-}
-
-// 保存草稿
-function saveDraft() {
-  localStorage.setItem("draft", textarea.value);
-  alert("Draft saved");
-}
-
-// 自动保存
-function autoSave() {
-  localStorage.setItem("draft", textarea.value);
-}
-
-// 读取草稿
-function loadDraft() {
-  const draft = localStorage.getItem("draft");
-  if (draft) textarea.value = draft;
-}
-
-// 提交内容
-function submitEntry() {
-  const content = textarea.value.trim();
-  if (!content) {
-    alert("内容为空");
-    return;
-  }
-
-  let entries = JSON.parse(localStorage.getItem("entries") || "[]");
-
-  entries.push({
-    content,
-    time: new Date().toLocaleString()
-  });
-
-  localStorage.setItem("entries", JSON.stringify(entries));
-
-  alert("提交成功 ✅");
-  textarea.value = "";
-  updateWordCount();
-}
-
-// 新建
-function newEntry() {
-  if (confirm("清空当前内容？")) {
-    textarea.value = "";
-    updateWordCount();
-  }
-}
-</script>
-</body></html>
+  </body>
+</html>
