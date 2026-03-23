@@ -1,46 +1,28 @@
-const API = "https://suyu-web.onrender.com";
-
-const input = document.getElementById("input");
+// ===== 初始化 =====
+const editor = document.getElementById("editor");
 const preview = document.getElementById("preview");
 const notesDiv = document.getElementById("notes");
 
-/* 自动加载 */
+// ===== 自动加载 =====
 window.onload = () => {
-  input.value = localStorage.getItem("draft") || "";
+  editor.value = localStorage.getItem("draft") || "";
   renderPreview();
   loadNotes();
 };
 
-/* 实时预览 */
-input.addEventListener("input", () => {
-  localStorage.setItem("draft", input.value);
+// ===== 实时预览 =====
+editor.addEventListener("input", () => {
+  localStorage.setItem("draft", editor.value);
   renderPreview();
 });
 
 function renderPreview() {
-  preview.innerHTML = marked.parse(input.value);
+  preview.innerHTML = marked.parse(editor.value);
 }
 
-/* 图片 */
-async function uploadImage() {
-  const file = document.getElementById("image").files[0];
-  const formData = new FormData();
-  formData.append("image", file);
-
-  const res = await fetch(API + "/upload", {
-    method: "POST",
-    body: formData
-  });
-
-  const data = await res.json();
-
-  input.value += `\n![image](${data.url})\n`;
-  renderPreview();
-}
-
-/* 保存笔记 */
+// ===== 保存笔记 =====
 function saveNote() {
-  const content = input.value;
+  const content = editor.value;
   const tags = document.getElementById("tags").value;
 
   let notes = JSON.parse(localStorage.getItem("notes") || "[]");
@@ -52,34 +34,29 @@ function saveNote() {
   });
 
   localStorage.setItem("notes", JSON.stringify(notes));
+
   loadNotes();
+  editor.value = "";
 }
 
-/* 渲染卡片 */
+// ===== 渲染卡片 =====
 function loadNotes() {
   let notes = JSON.parse(localStorage.getItem("notes") || "[]");
 
   notesDiv.innerHTML = "";
 
-  notes.forEach(n => {
+  notes.forEach((n, i) => {
     notesDiv.innerHTML += `
-      <div class="note">
-        <div>${marked.parse(n.content)}</div>
-        <div>
-          ${n.tags.split(" ").map(t => `<span class="tag">${t}</span>`).join("")}
-        </div>
-        <small>${n.time}</small>
+      <div class="p-4 bg-white dark:bg-slate-800 rounded-xl shadow hover:scale-105 transition">
+        <div class="text-xs opacity-60 mb-2">${n.time}</div>
+        <div class="text-sm mb-2">${marked.parse(n.content)}</div>
+        <div class="text-xs text-blue-500">${n.tags}</div>
       </div>
     `;
   });
 }
 
-/* 暗黑模式 */
+// ===== 暗黑模式 =====
 function toggleDark() {
-  document.body.classList.toggle("dark");
-}
-
-/* 左侧切换 */
-function switchTab(tab) {
-  alert("切换：" + tab);
+  document.documentElement.classList.toggle("dark");
 }
