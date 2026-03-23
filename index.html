@@ -2,48 +2,50 @@
 <html lang="zh">
 <head>
   <meta charset="UTF-8" />
-  <title>Suyu 日记</title>
+  <title>Suyu</title>
 
-  <!-- 样式 -->
   <link rel="stylesheet" href="style.css">
+
+  <!-- 字体 -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<div class="container">
+<div class="layout">
 
-  <!-- 登录 -->
-  <div id="auth">
-    <h2>登录 / 注册</h2>
-    <input id="username" placeholder="用户名" />
-    <input id="password" type="password" placeholder="密码" />
-    <button onclick="register()">注册</button>
-    <button onclick="login()">登录</button>
+  <!-- 左侧栏 -->
+  <div class="sidebar">
+    <h2>Suyu</h2>
+    <div class="menu">
+      <div onclick="switchTab('note')">📓 日记</div>
+      <div onclick="switchTab('algo')">💻 算法</div>
+    </div>
   </div>
 
-  <!-- 主界面 -->
-  <div id="app" style="display:none;">
-    <h2>我的日记</h2>
+  <!-- 主区域 -->
+  <div class="main">
 
-    <textarea id="content" placeholder="写点什么..."></textarea>
+    <!-- 编辑 -->
+    <div class="editor">
+      <textarea id="input" placeholder="写点什么..."></textarea>
 
-    <input id="tags" placeholder="标签（用逗号分隔）" />
+      <div class="toolbar">
+        <input type="file" id="image" />
+        <button onclick="uploadImage()">插入图片</button>
+      </div>
+    </div>
 
-    <input type="file" id="image" />
+    <!-- 预览 -->
+    <div class="preview" id="preview"></div>
 
-    <button onclick="uploadImage()">上传图片</button>
-    <button onclick="saveNote()">发布</button>
-
-    <hr />
-
-    <input id="search" placeholder="搜索..." oninput="searchNote()" />
-
-    <div id="notes"></div>
   </div>
 
 </div>
 
-<!-- JS -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="app.js"></script>
+</body>
+</html>
 
 </body>
 </html>
