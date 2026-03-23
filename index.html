@@ -1,60 +1,272 @@
 <!DOCTYPE html>
-<html lang="zh">
-<head>
-  <meta charset="UTF-8" />
-  <title>Suyu</title>
 
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Monolithic Editor - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-fixed-variant": "#525c6a",
+              "surface-tint": "#575e70",
+              "on-primary-fixed": "#383f50",
+              "inverse-on-surface": "#9b9d9e",
+              "secondary-fixed-dim": "#cbd5e6",
+              "on-primary-fixed-variant": "#545b6d",
+              "on-surface-variant": "#586064",
+              "background": "#f8f9fa",
+              "outline": "#737c7f",
+              "surface-variant": "#dbe4e7",
+              "primary-container": "#dce2f7",
+              "tertiary-dim": "#3c5666",
+              "tertiary-container": "#d0ecff",
+              "on-tertiary-fixed": "#2c4655",
+              "surface-container-highest": "#dbe4e7",
+              "on-secondary-container": "#485260",
+              "tertiary": "#486272",
+              "tertiary-fixed": "#d0ecff",
+              "on-background": "#2b3437",
+              "on-secondary-fixed": "#36404d",
+              "primary-fixed": "#dce2f7",
+              "secondary-container": "#d9e3f4",
+              "on-tertiary-fixed-variant": "#486272",
+              "secondary": "#56606e",
+              "error": "#9f403d",
+              "primary-fixed-dim": "#ced4e9",
+              "primary-dim": "#4b5264",
+              "surface-dim": "#d1dce0",
+              "inverse-primary": "#d9dff5",
+              "on-surface": "#2b3437",
+              "surface-container-lowest": "#ffffff",
+              "primary": "#575e70",
+              "surface-container": "#eaeff1",
+              "error-container": "#fe8983",
+              "outline-variant": "#abb3b7",
+              "surface-bright": "#f8f9fa",
+              "surface-container-high": "#e2e9ec",
+              "secondary-dim": "#4a5462",
+              "on-tertiary": "#f4faff",
+              "inverse-surface": "#0c0f10",
+              "secondary-fixed": "#d9e3f4",
+              "on-secondary": "#f7f9ff",
+              "on-primary-container": "#4b5263",
+              "error-dim": "#4e0309",
+              "on-tertiary-container": "#3e5868",
+              "on-primary": "#f7f7ff",
+              "surface-container-low": "#f1f4f6",
+              "tertiary-fixed-dim": "#c2def0",
+              "on-error-container": "#752121",
+              "surface": "#f8f9fa",
+              "on-error": "#fff7f6"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
 </head>
-<body>
-
-<div class="layout">
-
-  <!-- 左侧栏 -->
-  <div class="sidebar glass">
-    <h2>Suyu</h2>
-
-    <div class="menu">
-      <div onclick="switchTab('note')">📓 日记</div>
-      <div onclick="switchTab('algo')">💻 算法</div>
-    </div>
-
-    <button onclick="toggleDark()">🌙 暗黑模式</button>
-  </div>
-
-  <!-- 主区域 -->
-  <div class="main">
-
-    <!-- 编辑 -->
-    <div class="editor glass">
-      <textarea id="input" placeholder="写点什么..."></textarea>
-
-      <input id="tags" placeholder="标签（#学习 #生活）" />
-
-      <div class="toolbar">
-        <input type="file" id="image" />
-        <button onclick="uploadImage()">插入图片</button>
-        <button onclick="saveNote()">保存</button>
-      </div>
-    </div>
-
-    <!-- 右侧 -->
-    <div class="right">
-
-      <!-- 预览 -->
-      <div class="preview glass" id="preview"></div>
-
-      <!-- 卡片列表 -->
-      <div class="notes" id="notes"></div>
-
-    </div>
-
-  </div>
-
+<body class="bg-background font-body text-on-background antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- SideNavBar Component -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-slate-100 dark:bg-slate-900 border-r border-slate-200/15 dark:border-slate-800/15 flex flex-col py-10 px-6 gap-8 z-50">
+<div class="flex flex-col gap-1">
+<span class="text-lg font-bold text-slate-800 dark:text-slate-100">The Monolithic Editor</span>
+<span class="font-inter antialiased tracking-tight label-sm uppercase text-slate-500 dark:text-slate-400">Digital Architect</span>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<script src="app.js"></script>
-</body>
-</html>
+<button class="w-full py-2.5 px-4 bg-primary text-on-primary rounded-lg font-medium text-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+            New Project
+        </button>
+<nav class="flex flex-col gap-1 mt-4">
+<!-- Active Navigation Logic: "日常" is active as default home dashboard view -->
+<a class="flex items-center gap-3 py-2 text-slate-900 dark:text-white border-l-2 border-slate-600 dark:border-slate-400 pl-4 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors duration-150 scale-98 active:opacity-80 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-inter antialiased tracking-tight label-sm uppercase">日常</span>
+</a>
+<a class="flex items-center gap-3 py-2 text-slate-500 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 pl-4 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors duration-150 scale-98 active:opacity-80 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="insights">insights</span>
+<span class="font-inter antialiased tracking-tight label-sm uppercase">成果</span>
+</a>
+<a class="flex items-center gap-3 py-2 text-slate-500 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 pl-4 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors duration-150 scale-98 active:opacity-80 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+<span class="font-inter antialiased tracking-tight label-sm uppercase">算法</span>
+</a>
+</nav>
+<div class="mt-auto flex flex-col gap-1">
+<a class="flex items-center gap-3 py-2 text-slate-500 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 pl-4 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-inter antialiased tracking-tight label-sm uppercase">Settings</span>
+</a>
+<a class="flex items-center gap-3 py-2 text-slate-500 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 pl-4 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span class="font-inter antialiased tracking-tight label-sm uppercase">Support</span>
+</a>
+<div class="mt-6 flex items-center gap-3 px-4 py-3 bg-surface-container rounded-xl">
+<img alt="User Profile" class="w-8 h-8 rounded-full object-cover" data-alt="Close up of professional developer portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhYIRNWshP4QcBBIlWdgH2Lbg_Oc6H0zsjIpeQVV7_z5GNsTJCKx6r4tcith6tvIW3PIM1ofm83uBnm5GP8MgfnfxvH3A06JFFU6zfbvygxkm8s3llCSeWeiMX-whGHTuAiVE325NS3EzJdMg-loDYM1MUJNKvbbs_vSKFRyaSnFYYFxX3R8t4zCBA_E0QjcQIuqIqzGhv_TubG23u73xB6AYXqkAHVuYAv3KozjAT2MOpXGsFyJDLEssZUiuO68vYIJj2-RRv7J_Y"/>
+<div class="flex flex-col">
+<span class="text-xs font-bold text-on-surface">Alex Chen</span>
+<span class="text-[10px] text-on-surface-variant">Pro Plan</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Viewport -->
+<main class="ml-64 min-h-screen flex flex-col">
+<!-- TopAppBar Component -->
+<header class="sticky top-0 z-40 w-full bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-xl border-b border-slate-200/10 dark:border-slate-800/10 flex items-center justify-between px-8 h-16 opacity-90 hover:opacity-100 transition-opacity">
+<div class="flex items-center gap-4">
+<span class="text-xs font-semibold tracking-widest text-on-surface-variant uppercase">Project</span>
+<span class="text-outline-variant opacity-30">/</span>
+<span class="text-sm font-medium text-on-surface">Monolith_Core_v2.0</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative flex items-center bg-surface-container-high rounded-full px-4 py-1.5 w-64">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-xs w-full ml-2 placeholder:text-on-surface-variant/50" placeholder="Quick search..." type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="flex-1 p-10 overflow-auto">
+<!-- Breadcrumb Monolith -->
+<div class="mb-12">
+<div class="flex items-center gap-3 text-on-surface-variant text-sm mb-2">
+<span class="font-medium">Dashboard</span>
+<div class="h-4 w-[1px] bg-outline-variant"></div>
+<span>Overview</span>
+</div>
+<h1 class="text-[2.75rem] font-extrabold tracking-tight text-on-surface leading-none">Architectural Pulse</h1>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-6 auto-rows-[240px]">
+<!-- Primary Code/Editor Mockup Card -->
+<div class="col-span-8 row-span-2 bg-surface-container-lowest rounded-xl p-0 flex flex-col overflow-hidden shadow-[0px_20px_40px_rgba(43,52,55,0.06)] group">
+<div class="px-6 py-4 border-b border-outline-variant/10 flex items-center justify-between bg-surface-container-low">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-error/40"></div>
+<div class="w-3 h-3 rounded-full bg-secondary-dim/40"></div>
+<div class="w-3 h-3 rounded-full bg-primary/40"></div>
+<span class="ml-4 text-xs font-mono text-on-surface-variant opacity-70">src/components/Renderer.monolith</span>
+</div>
+<span class="text-[10px] font-mono bg-primary-container text-on-primary-container px-2 py-0.5 rounded">READ_ONLY</span>
+</div>
+<div class="flex-1 p-6 font-mono text-sm leading-relaxed overflow-hidden bg-surface-container-high/30">
+<div class="flex gap-4">
+<div class="text-on-surface-variant opacity-30 select-none text-right w-8">
+                                01<br/>02<br/>03<br/>04<br/>05<br/>06<br/>07<br/>08<br/>09<br/>10<br/>11<br/>12
+                            </div>
+<div class="flex-1 text-on-surface/80">
+<span class="text-primary-dim">import</span> { structuralLogic } <span class="text-primary-dim">from</span> <span class="text-tertiary">"@core/architect"</span>;<br/><br/>
+<span class="text-primary-dim">const</span> MonolithCanvas = (props) =&gt; {<br/>
+                                  <span class="text-primary-dim">const</span> { nodes, edges } = <span class="text-tertiary-dim">useArchitecture</span>();<br/><br/>
+                                  <span class="text-primary-dim">return</span> (<br/>
+                                    &lt;<span class="text-primary">Viewport</span> layout=<span class="text-tertiary">"minimalist"</span>&gt;<br/>
+                                      {nodes.<span class="text-tertiary-dim">map</span>(node =&gt; (<br/>
+                                        &lt;<span class="text-primary">Node</span> key={node.id} data={node.meta} /&gt;<br/>
+                                      ))}<br/>
+                                    &lt;/<span class="text-primary">Viewport</span>&gt;<br/>
+                                  );<br/>
+                                };
+                            </div>
+</div>
+</div>
+</div>
+<!-- Secondary Stats Grid (Right) -->
+<div class="col-span-4 bg-primary text-on-primary rounded-xl p-8 flex flex-col justify-between relative overflow-hidden group">
+<div class="relative z-10">
+<span class="label-sm uppercase tracking-widest opacity-70">Total Build Time</span>
+<div class="text-4xl font-extrabold mt-2">142.8<span class="text-xl font-normal opacity-60 ml-1">hrs</span></div>
+</div>
+<div class="relative z-10 flex items-center gap-2 text-xs font-medium bg-on-primary/10 w-fit px-3 py-1 rounded-full">
+<span class="material-symbols-outlined text-[14px]" data-icon="trending_up">trending_up</span>
+                        +12% from last cycle
+                    </div>
+<!-- Abstract Background Pattern -->
+<div class="absolute -right-8 -bottom-8 opacity-20 transform group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-[180px]" data-icon="architecture">architecture</span>
+</div>
+</div>
+<!-- Tertiary List Area -->
+<div class="col-span-4 bg-surface-container-low rounded-xl p-8 flex flex-col gap-6">
+<div class="flex items-center justify-between">
+<h3 class="label-sm uppercase font-bold tracking-widest text-on-surface-variant">Active Clusters</h3>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer" data-icon="more_horiz">more_horiz</span>
+</div>
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between group hover:bg-surface-container-lowest p-2 -mx-2 rounded-lg transition-colors cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+<span class="text-sm font-medium">Primary_API</span>
+</div>
+<span class="text-[10px] font-mono text-on-surface-variant">v1.2.4</span>
+</div>
+<div class="flex items-center justify-between group hover:bg-surface-container-lowest p-2 -mx-2 rounded-lg transition-colors cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+<span class="text-sm font-medium">Auth_Service</span>
+</div>
+<span class="text-[10px] font-mono text-on-surface-variant">v2.0.1</span>
+</div>
+<div class="flex items-center justify-between group hover:bg-surface-container-lowest p-2 -mx-2 rounded-lg transition-colors cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-amber-500"></div>
+<span class="text-sm font-medium">Worker_Pool_B</span>
+</div>
+<span class="text-[10px] font-mono text-on-surface-variant">v0.9.8</span>
+</div>
+</div>
+</div>
+<!-- Bottom Row Visual Cards -->
+<div class="col-span-4 bg-surface-container rounded-xl overflow-hidden relative group">
+<img alt="Cybersecurity interface" class="w-full h-full object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-60 transition-all duration-500" data-alt="Abstract glowing network server circuits" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOWUAfpVy-nSAczhwMmmhPY0LZhbB7mylsK9D7fn1svKzz8iR8hV1NFE0DYGUiopmyMHX2JXnLNRjcxFa1gWSck43eHj_G8dA4hZG0o3zFb-l56cS2a07GlRIHSXh1bL6Og88Yyth0heJ6xDi4tYrxf7F1x73Pg394ucuqEaxbcr0lcawF6DPy4TrkAMV6W__9uHlpHC_FX3SPsGGeKOfIfsXvYejzSUPhr9LBJ_a3eHlND0rIeC4O-BB7X8aQD6ZZ2H9KsEypFlDI"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-80"></div>
+<div class="absolute bottom-6 left-6 right-6">
+<h4 class="text-sm font-bold text-on-surface">Security Audit</h4>
+<p class="text-[10px] text-on-surface-variant mt-1">Last scan completed 4 hours ago. 0 critical vulnerabilities found.</p>
+</div>
+</div>
+<div class="col-span-4 bg-tertiary-container text-on-tertiary-container rounded-xl p-8 flex flex-col justify-between">
+<div>
+<span class="label-sm uppercase tracking-widest opacity-70">Memory Load</span>
+<div class="text-3xl font-extrabold mt-1">4.2<span class="text-lg font-normal ml-1">GB / 16GB</span></div>
+</div>
+<div class="w-full h-1.5 bg-on-tertiary-container/10 rounded-full overflow-hidden">
+<div class="h-full bg-on-tertiary-container w-[26%]"></div>
+</div>
+</div>
+<div class="col-span-4 bg-surface-container-highest rounded-xl p-8 flex flex-col justify-center items-center gap-3 border-2 border-dashed border-outline-variant/20 hover:border-primary/40 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-primary text-[32px]" data-icon="add_circle">add_circle</span>
+<span class="label-sm uppercase font-bold text-on-surface-variant">Add Workspace Module</span>
+</div>
+</div>
+</div>
+</main>
+<!-- FAB Suppression: Not rendered on dashboard to prioritize canvas space as per mandate -->
+</body></html>
