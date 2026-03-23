@@ -5,8 +5,6 @@
   <title>Suyu</title>
 
   <link rel="stylesheet" href="style.css">
-
-  <!-- 字体 -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -14,29 +12,43 @@
 <div class="layout">
 
   <!-- 左侧栏 -->
-  <div class="sidebar">
+  <div class="sidebar glass">
     <h2>Suyu</h2>
+
     <div class="menu">
       <div onclick="switchTab('note')">📓 日记</div>
       <div onclick="switchTab('algo')">💻 算法</div>
     </div>
+
+    <button onclick="toggleDark()">🌙 暗黑模式</button>
   </div>
 
   <!-- 主区域 -->
   <div class="main">
 
     <!-- 编辑 -->
-    <div class="editor">
+    <div class="editor glass">
       <textarea id="input" placeholder="写点什么..."></textarea>
+
+      <input id="tags" placeholder="标签（#学习 #生活）" />
 
       <div class="toolbar">
         <input type="file" id="image" />
         <button onclick="uploadImage()">插入图片</button>
+        <button onclick="saveNote()">保存</button>
       </div>
     </div>
 
-    <!-- 预览 -->
-    <div class="preview" id="preview"></div>
+    <!-- 右侧 -->
+    <div class="right">
+
+      <!-- 预览 -->
+      <div class="preview glass" id="preview"></div>
+
+      <!-- 卡片列表 -->
+      <div class="notes" id="notes"></div>
+
+    </div>
 
   </div>
 
@@ -44,8 +56,5 @@
 
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="app.js"></script>
-</body>
-</html>
-
 </body>
 </html>
