@@ -1,93 +1,49 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
+  <meta charset="UTF-8" />
+  <title>Suyu 日记</title>
+
+  <!-- 样式 -->
   <link rel="stylesheet" href="style.css">
-  <meta charset="UTF-8">
-  <title>记录</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: "Helvetica Neue", serif;
-      background: #0d0d0d;
-      color: #eaeaea;
-      line-height: 1.8;
-    }
-    .container {
-      max-width: 700px;
-      margin: 80px auto;
-      padding: 20px;
-    }
-    h1 {
-      font-weight: 400;
-      font-size: 32px;
-      letter-spacing: 2px;
-      margin-bottom: 10px;
-    }
-    .desc {
-      color: #888;
-      font-size: 14px;
-      margin-bottom: 60px;
-    }
-    .post {
-      margin-bottom: 40px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .post:hover {
-      opacity: 0.6;
-    }
-    .date {
-      font-size: 12px;
-      color: #666;
-    }
-    .title {
-      font-size: 20px;
-      margin: 5px 0;
-    }
-    .content {
-      display: none;
-      margin-top: 15px;
-      color: #ccc;
-    }
-    .footer {
-      margin-top: 80px;
-      font-size: 12px;
-      color: #555;
-      text-align: center;
-    }
-  </style>
 </head>
-
 <body>
-  <div class="container">
-    <h1>SU的BLOGS</h1>
-    <div class="desc">十年之后还会有人看到吗</div>
 
-    <div class="post" onclick="toggle(this)">
-      <div class="date">2026.03.21</div>
-      <div class="title">第一天</div>
-      <div class="content">
-        今天把这个网站搭起来了。<br>
-        可以算是这个网站的生日吧。<br>
-        为什么叫eminently ephemeral 呢，可能是因为短命吧对我来说。<br>
-        希望我能坚持几年。
-        
-      </div>
-    </div>
+<div class="container">
 
-
-    <div class="footer">
-      © 2026
-    </div>
+  <!-- 登录 -->
+  <div id="auth">
+    <h2>登录 / 注册</h2>
+    <input id="username" placeholder="用户名" />
+    <input id="password" type="password" placeholder="密码" />
+    <button onclick="register()">注册</button>
+    <button onclick="login()">登录</button>
   </div>
 
-  <script>
-    function toggle(el) {
-      let content = el.querySelector(".content");
-      content.style.display =
-        content.style.display === "block" ? "none" : "block";
-    }
-  </script>
+  <!-- 主界面 -->
+  <div id="app" style="display:none;">
+    <h2>我的日记</h2>
+
+    <textarea id="content" placeholder="写点什么..."></textarea>
+
+    <input id="tags" placeholder="标签（用逗号分隔）" />
+
+    <input type="file" id="image" />
+
+    <button onclick="uploadImage()">上传图片</button>
+    <button onclick="saveNote()">发布</button>
+
+    <hr />
+
+    <input id="search" placeholder="搜索..." oninput="searchNote()" />
+
+    <div id="notes"></div>
+  </div>
+
+</div>
+
+<!-- JS -->
+<script src="app.js"></script>
+
 </body>
-  <script src="app.js"></script>
 </html>
