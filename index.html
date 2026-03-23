@@ -216,4 +216,143 @@
 <button class="fixed bottom-8 right-8 w-16 h-16 bg-on-surface text-surface flex items-center justify-center hover:bg-primary transition-colors active:scale-95 shadow-xl z-50">
 <span class="material-symbols-outlined text-3xl">edit</span>
 </button>
+      <script>
+/* ========================
+   全局状态
+======================== */
+let currentTab = "record";
+
+/* ========================
+   DOM 获取
+======================== */
+const textarea = document.querySelector("textarea");
+const wordCounter = document.querySelector("[data-words]");
+const submitBtn = document.querySelector("button.bg-primary");
+const saveBtn = document.querySelector("button.border-2");
+const newEntryBtn = document.querySelector("aside button");
+const fabBtn = document.querySelector(".fixed.bottom-8");
+const navLinks = document.querySelectorAll("aside a");
+
+/* ========================
+   初始化
+======================== */
+init();
+
+function init() {
+  loadDraft();
+  updateWordCount();
+  bindEvents();
+}
+
+/* ========================
+   事件绑定
+======================== */
+function bindEvents() {
+
+  // 输入监听
+  textarea.addEventListener("input", () => {
+    updateWordCount();
+    autoSave();
+  });
+
+  // 提交
+  submitBtn.addEventListener("click", submitEntry);
+
+  // 保存草稿
+  saveBtn.addEventListener("click", saveDraft);
+
+  // 新建
+  newEntryBtn.addEventListener("click", newEntry);
+  fabBtn.addEventListener("click", newEntry);
+
+  // 侧栏点击
+  navLinks.forEach(link => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      switchTab(link.innerText.trim().toLowerCase());
+    });
+  });
+}
+
+/* ========================
+   功能逻辑
+======================== */
+
+// 切换页面
+function switchTab(tab) {
+  currentTab = tab;
+
+  // UI高亮
+  navLinks.forEach(link => {
+    link.classList.remove("bg-[#0058bc]", "text-white");
+  });
+
+  event.currentTarget.classList.add("bg-[#0058bc]", "text-white");
+
+  // 内容切换
+  if (tab.includes("code")) {
+    textarea.placeholder = "Write your code...";
+  } else if (tab.includes("settings")) {
+    textarea.placeholder = "Settings panel (coming soon)";
+  } else {
+    textarea.placeholder = "Start typing your transmission...";
+  }
+}
+
+// 字数统计
+function updateWordCount() {
+  const text = textarea.value.trim();
+  const words = text ? text.split(/\s+/).length : 0;
+
+  document.querySelector("span.font-label").innerText =
+    `Words: ${words} / Auto-sync enabled`;
+}
+
+// 保存草稿
+function saveDraft() {
+  localStorage.setItem("draft", textarea.value);
+  alert("Draft saved");
+}
+
+// 自动保存
+function autoSave() {
+  localStorage.setItem("draft", textarea.value);
+}
+
+// 读取草稿
+function loadDraft() {
+  const draft = localStorage.getItem("draft");
+  if (draft) textarea.value = draft;
+}
+
+// 提交内容
+function submitEntry() {
+  const content = textarea.value.trim();
+  if (!content) {
+    alert("内容为空");
+    return;
+  }
+
+  let entries = JSON.parse(localStorage.getItem("entries") || "[]");
+
+  entries.push({
+    content,
+    time: new Date().toLocaleString()
+  });
+
+  localStorage.setItem("entries", JSON.stringify(entries));
+
+  alert("提交成功 ✅");
+  textarea.value = "";
+  updateWordCount();
+}
+
+// 新建
+function newEntry() {
+  if (confirm("清空当前内容？")) {
+    textarea.value = "";
+    updateWordCount();
+  }
+}
+</script>
 </body></html>
