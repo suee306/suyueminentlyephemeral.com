@@ -564,6 +564,12 @@
       function switchTab(tabText, clickedLink) {
         currentTab = tabText;
 
+        if (currentTab === "settings") {
+          const enableDark = confirm("是否启用暗色模式？\n点击“确定”启用，点击“取消”保持浅色。");
+          document.documentElement.classList.toggle("dark", enableDark);
+          applyTheme();
+        }
+
         navLinks.forEach((link) => {
           link.classList.remove("bg-[#0058bc]", "text-white");
         });
